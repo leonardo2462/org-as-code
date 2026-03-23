@@ -1,0 +1,36 @@
+verdict: approved
+confidence: 0.88
+reviewed_by: founder
+reviewed_at: "2026-03-14T11:00:00Z"
+process_id: PERF-001
+
+decision_rationale: >
+  All critical blockers addressed. The ONNX INT8 approach is the right call — we cannot
+  ship at the accuracy floor. The Redis failure mode matrix is complete. The eventual
+  consistency guarantee is acceptable for document search.
+
+conditions:
+  - "Canary deployment: 5% traffic for minimum 48 hours before full rollout"
+  - "Founder reviews load test results at 10x before proceeding"
+  - "SOC2 Textract documentation reviewed by legal before ING demo"
+  - "F1 shadow evaluation must be live before any model change goes to production"
+
+findings:
+  strengths:
+    - "Builder correctly identified GIL limitation and switched to multiprocessing — genuine understanding"
+    - "ONNX INT8 maintains accuracy margin rather than gambling on the floor"
+    - "Failure mode matrix is complete and testable"
+    - "Feature flags for all components enable safe incremental rollout"
+  concerns:
+    - "4-week timeline is tight. If 10x load test fails, we may miss Q2 deadline."
+    - "Textract tail latency for 200+ page PDFs is unknown. Test with TotalEnergies-style docs."
+
+sign_offs:
+  eventual_consistency_d4: "APPROVED"
+  budget_ceiling: "APPROVED — +$2,810/month within 40% ceiling"
+
+state_transition: COMMITTED
+notes: >
+  PERF-001 COMMITTED. V.0 rejection caught accuracy cliff-edge and missing failure modes.
+  Revised plan maintains F1 safety margin (0.925 vs 0.91 floor) and includes full
+  rollback procedures. Total: 4 days, 4 artifacts.

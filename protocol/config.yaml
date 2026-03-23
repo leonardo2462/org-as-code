@@ -1,0 +1,62 @@
+# org-as-code protocol/config.yaml — v2 with security settings
+# Apply this file to: protocol/config.yaml in your org-as-code repo.
+
+hamiltonian:
+  weights:
+    urgency: 0.3
+    commitment: 0.2
+    demand: 0.3
+    blocking: 0.2
+  thresholds:
+    action_trigger: 0.5
+    escalation: 0.8
+
+process_engine:
+  limits:
+    max_retries: 3
+    timeout_hours: 48
+  enforce_transitions: true  # COMMITTED requires at least one V-step in audit trail
+  git_timeout_seconds: 30    # subprocess timeout for git operations (pull, commit, push)
+
+concurrency:
+  max_parallel_processes: 10
+  agent_capacity_limits:
+    per_agent_active_processes: 3
+  conflict_resolution_strategy: "highest_H(s)_wins"
+
+conventions:
+  commit_format: "{agent-id}: {P|V}.{n} {process-id} -- {description}"
+  process_id_format: "{PREFIX}-{NNN}"
+  branch_strategy: "main-only"
+  file_ownership: "process-assigned"
+
+# ─── Semantic Energy E(x) — quadratic convergence measurement ──────────────────
+energy:
+  weights:
+    gaps: 0.30
+    inconsistencies: 0.30
+    uncertainty: 0.25
+    evidence: 0.15
+  thresholds:
+    convergence: 0.10    # E(x) < 0.10 → ready to commit
+    minor_revision: 0.30 # E(x) < 0.30 → minor revision needed
+                         # E(x) >= 0.30 → major revision needed
+
+# ─── Security settings (new in v2 evaluation) ─────────────────────────────────
+security:
+  # 'permissive': unknown agent_ids log a warning and proceed (default, backward-compatible)
+  # 'strict': unknown agent_ids are rejected in all write tools
+  #           EXCEPT org_log_artifact (bootstrapping exemption)
+  mode: permissive
+
+  # Bootstrapping note: in strict mode, new agents must be added to
+  # registry/agents.yaml by a human before they can call any write tool.
+  # Use org_log_artifact (always allowed) to record the registration event.
+
+# ─── State storage ──────────────────────────────────────────────────────────
+state_storage:
+  # 'per_process': each process has its own processes/{ID}/state.yaml (default, v2.3+)
+  #                registry/state.yaml is auto-generated as a read-only index
+  #                Existing monolithic state auto-migrates on first write
+  # 'monolithic': all process states in registry/state.yaml (legacy, v2.2 behavior)
+  mode: per_process

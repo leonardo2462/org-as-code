@@ -1,0 +1,11 @@
+# Attractors — strategic goals that guide prioritization
+# These are organization-specific. Define your own.
+attractors:
+  - id: A-001
+    title: "Example: Auditable AI governance"
+    description: >
+      Every AI agent decision traceable to a commit, agent, and timestamp.
+      P↔V loop ensures nothing ships without validation.
+    created_at: "2026-01-01T00:00:00Z"
+    weight: 0.8
+    status: active

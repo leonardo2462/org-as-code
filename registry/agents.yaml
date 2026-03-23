@@ -1,0 +1,35 @@
+# Registered agents — humans and AI agents that can participate in processes
+# Edit this file to add your team members and AI agents
+agents:
+  - id: human-lead
+    name: "Team Lead (Human)"
+    type: human
+    interface: terminal
+    skills:
+      - strategic-review
+      - final-validation
+      - decision-making
+    status: active
+    capacity: 5
+
+  - id: coder
+    name: "Coder (AI Agent)"
+    type: ai
+    interface: claude-code
+    skills:
+      - implementation
+      - code-generation
+      - testing
+    status: active
+    capacity: 10
+
+  - id: reviewer
+    name: "Reviewer (AI Agent)"
+    type: ai
+    interface: ide
+    skills:
+      - technical-review
+      - refactoring
+      - testing
+    status: active
+    capacity: 5

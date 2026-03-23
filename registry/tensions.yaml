@@ -1,0 +1,3 @@
+# Tensions — open problems and opportunities
+# Use: python3 org_cli.py tension-add "Title" "Description" --priority 0.7
+tensions: []

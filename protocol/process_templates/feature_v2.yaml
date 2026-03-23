@@ -1,0 +1,107 @@
+name: feature_v2
+description: >
+  Standard feature development flow with Hamiltonian-conditional human gate.
+  For high-risk processes (H >= 0.8), human approval is mandatory at V.1.
+  For low-risk processes (H < 0.5), AI-only V.1 is permitted.
+  This reduces friction for routine features while maintaining rigor for critical ones.
+
+version: "2.0"
+changelog: >
+  v2.0: Added Hamiltonian-conditional human gate at V.1.
+  v1.0: Original feature template.
+
+steps:
+  - name: "P.0 — Proposal"
+    artifact: "P.0_proposal.md"
+    description: "Describe what needs to be built and why. Include Hamiltonian calculation."
+    agent_types: [ai, human]
+    next_state: P_COMPLETE
+    required_sections:
+      - STATE
+      - INTENTION
+      - CONSTRAINTS
+      - DECOMPOSITION
+      - DEPENDENCIES
+      - TRANSFORMATION
+      - OUTPUT
+      - VALIDATION
+    required_fields:
+      - hamiltonian_score
+      - urgency
+      - commitment
+      - demand
+      - blocking
+
+  - name: "V.0 — Review"
+    artifact: "V.0_review.yaml"
+    description: "Review the proposal. Approve, reject, or request changes. Include convergence scores."
+    agent_types: [ai, human]
+    next_state: V_COMPLETE
+    requires: P_COMPLETE
+    required_fields:
+      - verdict
+      - confidence
+      - reviewed_by
+      - findings.strengths
+      - findings.concerns
+      - convergence.gaps
+      - convergence.inconsistencies
+      - convergence.uncertainty
+      - convergence.evidence
+    verdict_options:
+      - approved
+      - approved_with_conditions
+      - rejected
+
+  - name: "P.1 — Implementation"
+    artifact: "P.1_implementation.md"
+    description: "Build the feature according to the approved proposal. Address all V.0 conditions."
+    agent_types: [ai]
+    next_state: P_COMPLETE
+    requires: V_COMPLETE
+    required_sections:
+      - "Response to each V.0 condition"
+      - "Updated acceptance criteria"
+
+  - name: "V.1 — Verification"
+    artifact: "V.1_verification.yaml"
+    description: >
+      Verify implementation meets requirements.
+      CONDITIONAL: human approval required if H(s) >= 0.8 OR template.force_human_gate = true.
+      AI-only approval permitted if H(s) < 0.5 AND no security/compliance implications.
+    agent_types: [ai, human]
+    next_state: COMMITTED
+    requires: P_COMPLETE
+    conditional_human_gate:
+      enabled: true
+      conditions:
+        - field: hamiltonian_score
+          operator: ">="
+          value: 0.8
+          reason: "High-priority processes require human sign-off"
+        - field: template.force_human_gate
+          operator: "=="
+          value: true
+          reason: "Explicitly flagged for human review"
+        - field: has_security_implications
+          operator: "=="
+          value: true
+          reason: "Security changes always require human review"
+        - field: has_compliance_implications
+          operator: "=="
+          value: true
+          reason: "Compliance changes always require human review"
+    ai_only_conditions:
+      - "H(s) < 0.5"
+      - "No security implications"
+      - "No compliance implications"
+      - "force_human_gate = false"
+    required_fields:
+      - verdict
+      - confidence
+      - reviewed_by
+      - state_transition
+      - convergence.gaps
+      - convergence.inconsistencies
+      - convergence.uncertainty
+      - convergence.evidence

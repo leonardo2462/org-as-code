@@ -1,0 +1,3 @@
+# Process states — auto-generated index when using per_process mode
+# Each process stores its own state in processes/{ID}/state.yaml
+processes: {}

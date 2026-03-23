@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "org-as-code"
+version = "2.3.1"
+description = "The missing governance layer for AI agent teams"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    {name = "SYNTRIAD"},
+]
+keywords = ["governance", "ai-agents", "mcp", "audit-trail", "multi-agent", "dependency-graph", "fdm"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "pyyaml>=6.0",
+    "mcp>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/SYNTRIAD/org-as-code"
+Repository = "https://github.com/SYNTRIAD/org-as-code"
+
+[project.scripts]
+org = "org_cli:main"
+org-mcp-server = "org_mcp_server:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools]
+py-modules = ["org_cli", "org_mcp_server", "fdm"]
+
+[tool.setuptools.packages.find]
+include = ["tools*"]

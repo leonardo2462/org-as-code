@@ -1,0 +1,71 @@
+verdict: rejected
+confidence: 0.85
+reviewed_by: critic
+reviewed_at: "2026-03-11T16:45:00Z"
+process_id: PERF-001
+
+findings:
+  strengths:
+    - "Profiling data is real and specific — not hand-waving."
+    - "D4 async write is the correct call. Index writes on the critical path is a classic mistake."
+    - "Budget math is done correctly. Textract cost at scale is accounted for."
+
+  blockers:
+    - id: B1
+      severity: critical
+      finding: "D3 accuracy risk is not adequately mitigated."
+      detail: >
+        Switching to all-MiniLM-L6-v2 drops F1 from 0.93 to 0.91 — exactly at the
+        constraint floor. This is not a margin, it is a cliff edge. Production data
+        distributions shift. If the held-out test set is not representative of
+        enterprise clients' document types, the real F1 may already be below 0.91.
+        The A/B test is insufficient: it runs for only 7 days, and we don't have
+        ground truth labels for live documents.
+      required_action: >
+        Either demonstrate F1 ≥ 0.91 on domain-specific test sets, or propose
+        alternative acceleration (quantization, ONNX runtime) that preserves accuracy.
+        Do not ship at the constraint floor.
+
+    - id: B2
+      severity: critical
+      finding: "D4 Redis failure mode is under-specified."
+      detail: >
+        What happens if Redis is unavailable? Synchronous fallback (defeating the
+        optimization) or failure? What is the maximum delay between analysis and
+        index availability? Dead-letter queue strategy? If a document is analyzed
+        but never indexed, the user gets a result they cannot search for.
+      required_action: >
+        Specify full failure mode matrix (Redis up, down, slow). Define the
+        consistency guarantee. Get founder sign-off on eventual consistency.
+
+    - id: B3
+      severity: high
+      finding: "No rollback plan."
+      detail: >
+        4-week rollout but no rollback procedure. If Textract has higher tail latency
+        for certain document types, how do we revert?
+      required_action: >
+        For each component (D1-D4): rollback trigger, procedure, and time estimate.
+
+  concerns:
+    - id: C1
+      severity: medium
+      finding: "D2 parallelization assumes NLP libraries are async-safe. Many (spaCy, NLTK) hold the GIL."
+      required_action: "Name specific libraries. Verify async safety."
+
+    - id: C2
+      severity: medium
+      finding: "Load test at 2x is insufficient. Enterprise clients will generate 10-50x volume."
+      required_action: "Load test at 10x minimum."
+
+    - id: C3
+      severity: low
+      finding: "SOC2 controls for Textract not specified. ING is a regulated financial institution."
+      required_action: "Add data residency, retention, encryption details."
+
+rejection_rationale: >
+  Two critical blockers must be resolved. B1 puts us at the accuracy constraint floor
+  with no safety margin. B2 leaves a data consistency gap. Fix B1 and B2, address
+  concerns, and resubmit.
+
+next_step: "P.1 by builder — respond to B1, B2, B3, C1, C2, C3"

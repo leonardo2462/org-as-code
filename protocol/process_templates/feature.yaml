@@ -1,0 +1,27 @@
+name: Feature Implementation
+description: "Standard flow for implementing a new feature across any repo."
+
+steps:
+  - name: P.0_proposal
+    type: P
+    description: "Describe what, why, and scope of the feature."
+    default_assignee: alice
+    artifact: "P.0_proposal.md"
+
+  - name: V.0_review
+    type: V
+    description: "Review proposal for clarity, scope, feasibility."
+    default_assignee: reviewer
+    artifact: "V.0_review.yaml"
+
+  - name: P.1_implementation
+    type: P
+    description: "Implement the feature. Code + tests."
+    default_assignee: coder
+    artifact: "P.1_implementation.md"
+
+  - name: V.1_verification
+    type: V
+    description: "Verify implementation against proposal. Test results."
+    default_assignee: reviewer
+    artifact: "V.1_verification.yaml"

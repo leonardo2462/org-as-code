@@ -1,0 +1,47 @@
+verdict: rejected
+confidence: 0.85
+reviewed_by: critic
+reviewed_at: "2026-03-16T14:00:00Z"
+process_id: SEC-001
+
+findings:
+  strengths:
+    - "The three attack vectors are correctly identified and real."
+    - "The strict/permissive mode design is the right approach for backward compatibility."
+    - "Logging security events to artifacts.jsonl reuses existing audit mechanism — elegant."
+
+  blockers:
+    - id: B1
+      severity: critical
+      finding: "The commit message sanitization approach is architecturally wrong."
+      detail: >
+        _git_run() uses subprocess.run() with a list of arguments — NOT shell=True.
+        When args are passed as a list, the shell never interprets them. There is NO
+        shell injection vulnerability. Stripping characters from commit messages would
+        corrupt legitimate messages (e.g., "fix: handle edge case $(x > 0)").
+        The real risk is git trailer injection via embedded newlines, creating fake
+        'Co-authored-by' entries. The fix should strip newlines only.
+      required_action: "Revise D1 to strip newlines only (\\n, \\r). Do not strip other characters."
+
+    - id: B2
+      severity: critical
+      finding: "Path traversal threat model is incorrect."
+      detail: >
+        Python's pathlib does NOT allow traversal in the way described. The real risk is
+        process IDs like 'FEAT-001/../../../registry' creating unexpected directory names.
+        The regex whitelist is the right fix, but the threat model is wrong.
+      required_action: "Keep the regex whitelist, revise the threat model."
+
+    - id: B3
+      severity: medium
+      finding: "Agent validation creates a chicken-and-egg problem."
+      detail: >
+        New agents cannot self-register if registration requires a validated agent_id.
+        The bootstrapping flow is undefined.
+      required_action: "Define how new agents get registered."
+
+rejection_rationale: >
+  Two critical architectural errors (B1, B2) would result in incorrect implementation.
+  The commit message sanitization would corrupt legitimate messages. Reject and revise.
+
+next_step: "P.1 revision by architect"

@@ -1,0 +1,9 @@
+# Health metrics — computed live by org_read_health / org dashboard
+# This file is for reference only; actual metrics are calculated from state.yaml and artifacts.jsonl
+metrics:
+  active_processes: 0
+  committed_total: 0
+  avg_cycle_time_hours: 0
+  chain_integrity: valid
+  chain_length: 0
+  open_tensions: 0

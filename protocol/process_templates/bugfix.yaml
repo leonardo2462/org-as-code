@@ -1,0 +1,27 @@
+name: Bug Fix
+description: "Diagnose and fix a bug. Short P,V cycle."
+
+steps:
+  - name: P.0_diagnosis
+    type: P
+    description: "Root cause analysis. What's broken, why, where."
+    default_assignee: coder
+    artifact: "P.0_diagnosis.md"
+
+  - name: V.0_review
+    type: V
+    description: "Validate diagnosis. Confirm root cause."
+    default_assignee: reviewer
+    artifact: "V.0_review.yaml"
+
+  - name: P.1_fix
+    type: P
+    description: "Implement the fix."
+    default_assignee: coder
+    artifact: "P.1_fix.md"
+
+  - name: V.1_verification
+    type: V
+    description: "Test the fix. Confirm bug resolved, no regressions."
+    default_assignee: reviewer
+    artifact: "V.1_verification.yaml"
